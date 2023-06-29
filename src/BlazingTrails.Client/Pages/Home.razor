@@ -1,0 +1,52 @@
+﻿@page "/"
+
+@inject HttpClient _http
+
+<PageTitle>Home</PageTitle>
+
+@if (Trails is null || !Trails.Any())
+{
+    <div>Loading Trails...</div>
+
+}
+else
+{
+    <div id="trails" class="row">
+        @foreach (var trail in Trails)
+        {
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                <div id="trail-@trail.Id" class="card shadow">
+                    <img class="card-img-top" src="@trail.Image" alt="@trail.Name">
+                    <div class="card-body">
+                        <h5 class="card-title">@trail.Name</h5>
+                        <h6 class="card-subtitle mb-3 text-muted">
+                            <span class="oi oi-map-marker"></span>
+                            @trail.Location
+                        </h6>
+                        <div class="d-flex justify-content-between">
+                            <span>
+                                <span class="oi oi-clock mr-2"></span>
+                                @trail.Duration.ToString()
+                            </span>
+                            <span>
+                                <span class="oi oi-infinity mr-2"></span>
+                                @trail.Length KM
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+    </div>
+}
+
+@code {
+    public IEnumerable<Trail>? Trails { get; set; } = Enumerable.Empty<Trail>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Trails = await _http.GetFromJsonAsync<IEnumerable<Trail>>("trails/trail-data.json");
+    }
+}
