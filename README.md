@@ -22,4 +22,4 @@ and authentication.
 
 [MIT License](./LICENSE)
 
-Copyright &copy; 2022 Felipe Romero
+Copyright &copy; 2023 Felipe Romero
