@@ -1,0 +1,31 @@
+﻿@page "/greetings"
+
+<h3>Greetings</h3>
+
+<p>
+    @foreach (var greeting in MyGreetings)
+    {
+        <span>@greeting</span><br>
+    }
+</p>
+
+@code {
+    public ICollection<string> MyGreetings { get; set; } = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        MyGreetings.Add("Welcome");
+
+        await Task.Delay(1000);
+
+        MyGreetings.Add("to");
+
+        // If we want the UI to update after each word is added to the list, then we must manually call
+        // StateHasChanged to inform Blazor that the UI should be updated.
+        StateHasChanged();
+
+        await Task.Delay(1000);
+
+        MyGreetings.Add("Blazor in Action");
+    }
+}

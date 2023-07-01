@@ -19,10 +19,12 @@
         base.OnInitialized();
     }
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("OnInitializedAsync");
-        return base.OnInitializedAsync();
+        Console.WriteLine("OnInitializedAsync - Begin");
+        await base.OnInitializedAsync();
+        await Task.Delay(300);
+        Console.WriteLine("OnInitializedAsync - End");
     }
 
     protected override void OnParametersSet()
