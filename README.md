@@ -7,6 +7,8 @@ explore, as well as add and update routes of their own. As we build this app, yo
 learn about the key features of Blazor, things such as routing, forms and validation,
 and authentication.
 
+![Blazing Trails](./assets/BlazingTrails.png)
+
 ## Prerequisites
 
 - Visual Studio 2022
