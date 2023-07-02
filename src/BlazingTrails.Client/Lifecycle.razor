@@ -1,5 +1,7 @@
 ﻿@page "/lifecycle"
 
+@implements IDisposable
+
 <h3>Component Lifecycle</h3>
 <p>Check the browser console for details.</p>
 
@@ -50,4 +52,6 @@
         Console.WriteLine($"OnAfterRenderAsync (First render: {firstRender}.");
         return base.OnAfterRenderAsync(firstRender);
     }
+
+    public void Dispose() => Console.WriteLine("Dispose");
 }
