@@ -8,23 +8,29 @@
     <div class="card-body">
         <h5 class="card-title">@Trail.Name</h5>
         <h6 class="card-subtitle mb-3 text-muted">
-            <span class="oi oi-map-marker"></span>
+            <span class="oi oi-map-marker" title="Location"></span>
             @Trail.Location
         </h6>
-        <div class="d-flex justify-content-between">
+        <div class="mb-3 d-flex justify-content-between">
             <span>
-                <span class="oi oi-clock mr-2"></span>
+                <span class="oi oi-clock mr-2" title="Duration"></span>
                 @Trail.Duration.ToString()
             </span>
             <span>
-                <span class="oi oi-infinity mr-2"></span>
+                <span class="oi oi-infinity mr-2" title="Length"></span>
                 @Trail.Length KM
             </span>
         </div>
+        <button class="btn btn-primary" type="button" title="View" @onclick="@(() => OnSelected.Invoke(Trail))">
+            <span class="oi oi-eye"></span>
+        </button>
     </div>
 </div>
 
 @code {
     [Parameter, EditorRequired]
     public Trail? Trail { get; set; }
+
+    [Parameter, EditorRequired]
+    public Action<Trail> OnSelected { get; set; } = default!;
 }
