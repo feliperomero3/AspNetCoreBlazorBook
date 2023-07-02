@@ -10,6 +10,7 @@
 }
 else
 {
+    <TrailDetails Trail="SelectedTrail" />
     <div id="trails" class="row">
         @foreach (var trail in Trails)
         {
@@ -21,7 +22,9 @@ else
 }
 
 @code {
-    public IEnumerable<Trail>? Trails { get; set; } = Enumerable.Empty<Trail>();
+    public IEnumerable<Trail>? Trails { get; set; }
+
+    public Trail? SelectedTrail { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

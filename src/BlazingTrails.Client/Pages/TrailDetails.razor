@@ -1,0 +1,59 @@
+﻿@if (SelectedTrail is null)
+{
+    return;
+}
+
+<div class="drawer-wrapper @(IsOpen ? "slide" : "")">
+    <div class="drawer-mask"></div>
+    <div class="drawer">
+        <div class="drawer-content">
+            <img src="@SelectedTrail.Image" alt="@SelectedTrail.Name">
+            <div class="trail-details">
+                <h3>@SelectedTrail.Name</h3>
+                <h6 class="mb-3 text-muted">
+                    <span class="oi oi-map-marker"></span>
+                    @SelectedTrail.Location
+                </h6>
+                <div class="mt-4">
+                    <span class="mr-5">
+                        <span class="oi oi-clock mr-2"></span>
+                        @SelectedTrail.Duration.ToString()
+                    </span>
+                    <span>
+                        <span class="oi oi-infinity mr-2"></span>
+                        @SelectedTrail.Length KM
+                    </span>
+                </div>
+                <p class="mt-4">@SelectedTrail.Description</p>
+            </div>
+        </div>
+        <div class="drawer-controls">
+            <button class="btn btn-secondary" @onclick="Close">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    public bool IsOpen { get; set; }
+
+    public Trail? SelectedTrail { get; set; }
+
+    [Parameter, EditorRequired]
+    public Trail? Trail { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (Trail is not null)
+        {
+            SelectedTrail = Trail;
+            IsOpen = true;
+        }
+    }
+
+    public void Close()
+    {
+        IsOpen = false;
+    }
+}
