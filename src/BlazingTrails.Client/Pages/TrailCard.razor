@@ -21,7 +21,7 @@
                 @Trail.Length KM
             </span>
         </div>
-        <button class="btn btn-primary" type="button" title="View" @onclick="@(() => OnSelected.Invoke(Trail))">
+        <button class="btn btn-primary" type="button" title="View" @onclick="@(() => OnSelected.Invoke(Trail))" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight-@Trail.Id" aria-controls="offcanvasRight">
             <span class="oi oi-eye"></span>
         </button>
     </div>

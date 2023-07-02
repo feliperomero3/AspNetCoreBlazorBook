@@ -10,13 +10,13 @@
 }
 else
 {
-    <TrailDetails Trail="SelectedTrail" />
     <div id="trails" class="row">
         @foreach (var trail in Trails)
         {
             <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
                 <TrailCard Trail="trail" OnSelected="HandleTrailSelected" />
             </div>
+            <TrailDetails Trail="trail" />
         }
     </div>
 }
@@ -34,6 +34,6 @@ else
     private void HandleTrailSelected(Trail trail)
     {
         SelectedTrail = trail;
-        StateHasChanged();
+        Console.WriteLine($"Selected Trail: {trail.Name}");
     }
 }

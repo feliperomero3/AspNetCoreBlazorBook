@@ -3,10 +3,12 @@
     return;
 }
 
-<div class="drawer-wrapper @(IsOpen ? "slide" : "")">
-    <div class="drawer-mask"></div>
-    <div class="drawer">
-        <div class="drawer-content">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight-@SelectedTrail.Id" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+        <button type="button" class="btn-close text-reset" title="Close" @onclick="Close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="">
             <img class="mb-3" src="@SelectedTrail.Image" alt="@SelectedTrail.Name">
             <div class="trail-details">
                 <h3>@SelectedTrail.Name</h3>
@@ -28,7 +30,7 @@
             </div>
         </div>
         <div class="drawer-controls mb-3">
-            <button class="btn btn-secondary" type="button" @onclick="Close">
+            <button class="btn btn-secondary" type="button" @onclick="Close" data-bs-dismiss="offcanvas" aria-label="Close">
                 Close
             </button>
         </div>
@@ -54,7 +56,6 @@
 
     public void Close()
     {
-        SelectedTrail = null;
         IsOpen = false;
     }
 }
