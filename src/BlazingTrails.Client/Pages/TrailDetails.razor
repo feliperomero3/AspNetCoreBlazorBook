@@ -8,28 +8,24 @@
         <button type="button" class="btn-close text-reset" title="Close" @onclick="Close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <div class="">
-            <img class="mb-3" src="@SelectedTrail.Image" alt="@SelectedTrail.Name">
-            <div class="trail-details">
-                <h3>@SelectedTrail.Name</h3>
-                <h6 class="mb-3 text-muted">
-                    <span class="oi oi-map-marker"></span>
-                    @SelectedTrail.Location
-                </h6>
-                <div class="mt-4">
-                    <span class="me-5">
-                        <span class="oi oi-clock me-2"></span>
-                        @SelectedTrail.Duration.ToString()
-                    </span>
-                    <span>
-                        <span class="oi oi-infinity me-2"></span>
-                        @SelectedTrail.Length KM
-                    </span>
-                </div>
-                <p class="mt-4">@SelectedTrail.Description</p>
-            </div>
+        <img class="mb-3" src="@SelectedTrail.Image" alt="@SelectedTrail.Name">
+        <h3>@SelectedTrail.Name</h3>
+        <h6 class="mb-3 text-muted">
+            <span class="oi oi-map-marker"></span>
+            @SelectedTrail.Location
+        </h6>
+        <div class="mt-4">
+            <span class="me-5">
+                <span class="oi oi-clock me-2"></span>
+                @SelectedTrail.Duration.ToString()
+            </span>
+            <span>
+                <span class="oi oi-infinity me-2"></span>
+                @SelectedTrail.Length KM
+            </span>
         </div>
-        <div class="drawer-controls mb-3">
+        <p class="mt-4">@SelectedTrail.Description</p>
+        <div class="mb-3">
             <button class="btn btn-secondary" type="button" @onclick="Close" data-bs-dismiss="offcanvas" aria-label="Close">
                 Close
             </button>
