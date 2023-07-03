@@ -2,7 +2,7 @@
 
 @inject HttpClient _http
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Home - Blazing Trails</PageTitle>
 
 @if (Trails is null || !Trails.Any())
 {
@@ -10,6 +10,8 @@
 }
 else
 {
+    <TrailSearch />
+
     <div id="trails" class="row">
         @foreach (var trail in Trails)
         {

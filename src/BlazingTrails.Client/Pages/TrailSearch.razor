@@ -1,0 +1,28 @@
+﻿@inject NavigationManager Navigation
+
+<h2 class="display-6 text-center">Welcome to Blazing Trails</h2>
+<p class="lead text-center">
+    Find the most beautiful hiking trails
+    using our blazing fast search!
+</p>
+<div class="mb-4">
+    <label class="form-label" for="search-trail">Search for a Trail</label>
+    <input class="form-control form-control-lg"
+           id="search-trail"
+           type="text"
+           @onkeydown="Search"
+           @bind="SearchTerm"
+           @bind:event="oninput" />
+</div>
+
+@code {
+    public string? SearchTerm { get; set; }
+
+    private void Search(KeyboardEventArgs eventArgs)
+    {
+        if (eventArgs.Key == "Enter")
+        {
+            Navigation.NavigateTo($"/search/{SearchTerm}");
+        }
+    }
+}
