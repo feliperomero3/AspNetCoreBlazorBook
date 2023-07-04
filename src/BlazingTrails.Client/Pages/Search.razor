@@ -1,9 +1,54 @@
-﻿@page "/search"
+﻿@page "/search/{SearchTerm}"
+@inject NavigationManager Navigation
+@inject HttpClient http
 
 <PageTitle>Search Trails - Blazing Trails</PageTitle>
 
-<h3>Search results</h3>
+<nav aria-label="breadcrum">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Search</li>
+    </ol>
+</nav>
+
+<h3>Search results for: @SearchTerm</h3>
+
+@if (SearchResults is null)
+{
+    <p>Loading search results...</p>
+}
+else
+{
+    <div id="trails" class="row">
+        @foreach (var trail in SearchResults)
+        {
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                <TrailCard Trail="trail" OnSelected="HandleTrailSelected" />
+            </div>
+            <TrailDetails Trail="trail" />
+        }
+    </div>
+}
 
 @code {
+    public IEnumerable<Trail>? SearchResults { get; set; }
 
+    [Parameter]
+    public string SearchTerm { get; set; } = string.Empty;
+
+    public Trail? SelectedTrail { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var trails = await http.GetFromJsonAsync<IEnumerable<Trail>>("trails/trail-data.json");
+
+        SearchResults = trails?.Where(t => t.Name.Contains(SearchTerm, StringComparison.InvariantCultureIgnoreCase) ||
+            t.Location.Contains(SearchTerm, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    private void HandleTrailSelected(Trail trail)
+    {
+        SelectedTrail = trail;
+        Console.WriteLine($"Selected Trail: {trail.Name}");
+    }
 }
