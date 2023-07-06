@@ -1,4 +1,5 @@
 ﻿@page "/search/{SearchTerm}"
+@page "/search/{SearchTerm}/maxlength/{MaxLength:int}"
 @inject NavigationManager Navigation
 @inject HttpClient http
 
@@ -11,14 +12,16 @@
     </ol>
 </nav>
 
-<h3>Search results for: @SearchTerm</h3>
-
 @if (SearchResults is null)
 {
     <p>Loading search results...</p>
 }
 else
 {
+    <div class="clearfix">
+        <h3 class="float-md-start">Search results for: @SearchTerm</h3>
+        <SearchFilter SearchTerm="@SearchTerm" />
+    </div>
     <div id="trails" class="row">
         @foreach (var trail in SearchResults)
         {
@@ -33,8 +36,13 @@ else
 @code {
     public IEnumerable<Trail>? SearchResults { get; set; }
 
+    private IEnumerable<Trail>? _cachedSearchResults { get; set; }
+
     [Parameter]
     public string SearchTerm { get; set; } = string.Empty;
+
+    [Parameter]
+    public int? MaxLength { get; set; }
 
     public Trail? SelectedTrail { get; set; }
 
@@ -42,13 +50,30 @@ else
     {
         var trails = await http.GetFromJsonAsync<IEnumerable<Trail>>("trails/trail-data.json");
 
-        SearchResults = trails?.Where(t => t.Name.Contains(SearchTerm, StringComparison.InvariantCultureIgnoreCase) ||
+        SearchResults = trails!.Where(t =>
+            t.Name.Contains(SearchTerm, StringComparison.InvariantCultureIgnoreCase) ||
             t.Location.Contains(SearchTerm, StringComparison.InvariantCultureIgnoreCase));
+
+        _cachedSearchResults = SearchResults;
     }
 
     private void HandleTrailSelected(Trail trail)
     {
         SelectedTrail = trail;
         Console.WriteLine($"Selected Trail: {trail.Name}");
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (_cachedSearchResults!.Any() && MaxLength.HasValue && MaxLength > 0)
+        {
+            SearchResults = _cachedSearchResults!.Where(t => t.Length <= MaxLength);
+        }
+        else if (_cachedSearchResults!.Any() && MaxLength is null)
+        {
+            SearchResults = _cachedSearchResults;
+        }
+
+        StateHasChanged();
     }
 }
