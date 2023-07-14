@@ -1,31 +1,60 @@
 ﻿@inject NavigationManager Navigation
 
-<div class="row float-md-end row-cols-lg-auto">
-    <div class="col mb-3">
-        <label for="maxLength" class="visually-hidden">Max Length</label>
-        <input type="number" class="form-control" id="maxLength" placeholder="Max. Length" @bind="@MaxLength" />
+<div class="row float-md-end">
+    <label for="maxTime" class="visually-hidden">Max Time</label>
+    <div class="input-group col mb-3">
+        <input type="number" class="form-control" id="maxTime" placeholder="Max. Time" aria-label="Max. Length" aria-describedby="hours" @bind="@MaxTime" />
+        <span class="input-group-text" id="hours">Hours</span>
+    </div>
+    <label for="maxLength" class="visually-hidden">Max Length</label>
+    <div class="input-group col mb-3">
+        <input type="number" class="form-control" id="maxLength" placeholder="Max. Length" aria-label="Max. Length" aria-describedby="kilo" @bind="@MaxLength" />
+        <span class="input-group-text" id="kilo">KM</span>
     </div>
     <div class="col mb-3">
         <button class="btn btn-outline-primary" type="button" @onclick="@FilterSearchResults">Filter</button>
-        <button class="btn btn-outline-secondary" type="button" @onclick="@ClearSearchFilter">Clear</button>
+        <button class="btn btn-outline-secondary" type="button" @onclick="@ClearSearchResultFilter">Clear</button>
     </div>
 </div>
 
 @code {
-    public int MaxLength { get; set; }
+    private Dictionary<string, object?>? _queryArguments;
 
     [Parameter, EditorRequired]
     public string? SearchTerm { get; set; }
 
+    [Parameter]
+    public int? MaxLength { get; set; }
+
+    [Parameter]
+    public int? MaxTime { get; set; }
+
+    public string MaxLengthKey => nameof(MaxLength);
+    public string MaxTimeKey => nameof(MaxTime);
+
     public void FilterSearchResults()
     {
-        Navigation.NavigateTo($"/search/{SearchTerm}/maxlength/{MaxLength}");
+        _queryArguments = new Dictionary<string, object?>();
+
+        if (MaxTime > 0)
+        {
+            _queryArguments.Add(MaxTimeKey, MaxTime);
+        }
+
+        if (MaxLength > 0)
+        {
+            _queryArguments.Add(MaxLengthKey, MaxLength);
+        }
+
+        var uri = Navigation.GetUriWithQueryParameters(_queryArguments);
+
+        Navigation.NavigateTo(uri);
     }
 
-    public void ClearSearchFilter()
+    public void ClearSearchResultFilter()
     {
-        MaxLength = 0;
+        MaxLength = null;
+        MaxTime = null;
         Navigation.NavigateTo($"/search/{SearchTerm}");
     }
-
 }

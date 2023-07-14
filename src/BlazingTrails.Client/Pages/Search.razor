@@ -1,11 +1,11 @@
 ﻿@page "/search/{SearchTerm}"
-@page "/search/{SearchTerm}/maxlength/{MaxLength:int}"
+
 @inject NavigationManager Navigation
 @inject HttpClient http
 
 <PageTitle>Search Trails - Blazing Trails</PageTitle>
 
-<nav aria-label="breadcrum">
+<nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
         <li class="breadcrumb-item active" aria-current="page">Search</li>
@@ -20,7 +20,7 @@ else
 {
     <div class="clearfix">
         <h3 class="float-md-start">Search results for: @SearchTerm</h3>
-        <SearchFilter SearchTerm="@SearchTerm" />
+        <SearchFilter SearchTerm="@SearchTerm" MaxLength="@MaxLength" MaxTime="@MaxTime" />
     </div>
     <div id="trails" class="row">
         @foreach (var trail in SearchResults)
@@ -41,8 +41,11 @@ else
     [Parameter]
     public string SearchTerm { get; set; } = string.Empty;
 
-    [Parameter]
+    [Parameter, SupplyParameterFromQuery]
     public int? MaxLength { get; set; }
+
+    [Parameter, SupplyParameterFromQuery]
+    public int? MaxTime { get; set; }
 
     public Trail? SelectedTrail { get; set; }
 
@@ -63,17 +66,31 @@ else
         Console.WriteLine($"Selected Trail: {trail.Name}");
     }
 
-    protected override void OnParametersSet()
+    private void UpdateFilters()
     {
-        if (_cachedSearchResults!.Any() && MaxLength.HasValue && MaxLength > 0)
+        var filters = new List<Func<Trail, bool>>();
+
+        if (MaxLength.HasValue && MaxLength > 0)
         {
-            SearchResults = _cachedSearchResults!.Where(t => t.Length <= MaxLength);
+            filters.Add(t => t.Length <= MaxLength);
         }
-        else if (_cachedSearchResults!.Any() && MaxLength is null)
+        if (MaxTime.HasValue && MaxTime > 0)
+        {
+            filters.Add(t => t.Duration.TotalHours <= MaxTime);
+        }
+        if (filters.Any())
+        {
+            SearchResults = _cachedSearchResults!.Where(t => filters.All(f => f(t)));
+        }
+        else
         {
             SearchResults = _cachedSearchResults;
         }
+    }
 
+    protected override void OnParametersSet()
+    {
+        UpdateFilters();
         StateHasChanged();
     }
 }
